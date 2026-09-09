@@ -1,0 +1,206 @@
+[
+  {
+    "id": "coconut",
+    "title": "Training Large Language Models to Reason in a Continuous Latent Space",
+    "authors": ["Shibo Hao", "Sainbayar Sukhbaatar", "DiJia Su", "Xian Li", "Zhiting Hu", "Jason Weston", "Yuandong Tian"],
+    "year": 2024,
+    "venue": "arXiv:2412.06769 (ICLR 2025)",
+    "url": "https://arxiv.org/abs/2412.06769",
+    "github": "https://github.com/facebookresearch/coconut",
+    "centralClaim": "LLMs can reason in continuous latent space by feeding the last hidden state directly as the next input embedding (\"continuous thought\"), enabling BFS-like search over reasoning paths rather than committing to a single deterministic trajectory as in language-space CoT.",
+    "evidenceType": "EXPERIMENTAL",
+    "relevantConcepts": ["latent reasoning", "continuous thought", "chain-of-continuous-thought", "language vs latent space", "BFS reasoning"],
+    "keyResults": [
+      { "metric": "ProsQA accuracy (GPT-2)", "value": "67.8%", "condition": "Coconut (k=4)" },
+      { "metric": "ProsQA accuracy (GPT-2)", "value": "54.2%", "condition": "CoT baseline" },
+      { "metric": "GSM8K (Llama 3.2-3B)", "value": "31.7%", "condition": "Coconut" },
+      { "metric": "GSM8K (Llama 3.2-3B)", "value": "26.0%", "condition": "no-CoT" }
+    ],
+    "limitations": [
+      "Training instability when adding multiple continuous thoughts at once",
+      "Larger models show smaller gains due to extensive language pre-training",
+      "Requires specialized multi-stage training curriculum",
+      "Latent thoughts harder to interpret than language CoT"
+    ],
+    "whatItDoesNotDemonstrate": [
+      "Does not show latent reasoning works at scale without language pre-training",
+      "Does not prove continuous thoughts are universally better than CoT",
+      "No evaluation on open-ended generation tasks"
+    ],
+    "evidenceLevel": "FORMAL",
+    "conceptFamily": "latent-reasoning"
+  },
+  {
+    "id": "recurrent-depth",
+    "title": "Scaling up Test-Time Compute with Latent Reasoning: A Recurrent Depth Approach",
+    "authors": ["Jonas Geiping", "Sean McLeish", "Neel Jain", "John Kirchenbauer", "Siddharth Singh", "Brian R. Bartoldson", "Bhavya Kailkhura", "Abhinav Bhatele", "Tom Goldstein"],
+    "year": 2025,
+    "venue": "NeurIPS 2025",
+    "url": "https://arxiv.org/abs/2502.05171",
+    "github": "https://github.com/seal-rg/recurrent-pretraining",
+    "centralClaim": "A depth-recurrent transformer architecture can scale test-time compute by iterating a recurrent block in latent space, improving reasoning performance without generating additional tokens. Supports adaptive compute, KV-cache sharing, and speculative decoding.",
+    "evidenceType": "EXPERIMENTAL",
+    "relevantConcepts": ["recurrent depth", "test-time compute scaling", "latent reasoning", "adaptive compute", "KV-cache sharing", "speculative decoding"],
+    "keyResults": [
+      { "metric": "ARC-Challenge (3.5B)", "value": "42.3%", "condition": "r=32 recurrence" },
+      { "metric": "ARC-Challenge (3.5B)", "value": "34.1%", "condition": "r=1 (baseline)" },
+      { "metric": "GSM8K (3.5B)", "value": "58.7%", "condition": "r=32 recurrence" },
+      { "metric": "GSM8K (3.5B)", "value": "22.4%", "condition": "r=1 (baseline)" },
+      { "metric": "HumanEval (3.5B)", "value": "34.1%", "condition": "r=32 recurrence" },
+      { "metric": "HumanEval (3.5B)", "value": "18.3%", "condition": "r=1 (baseline)" }
+    ],
+    "limitations": [
+      "Not currently the dominant paradigm for reasoning",
+      "Oversight concerns vs verbalized chain-of-thought",
+      "Path independence and convergence behaviors need more study",
+      "Requires training with random recurrence depth"
+    ],
+    "whatItDoesNotDemonstrate": [
+      "Does not surpass largest CoT models on all benchmarks",
+      "Does not prove latent reasoning is always more compute-efficient",
+      "Limited evaluation on very long-context tasks"
+    ],
+    "evidenceLevel": "EXPERIMENTAL",
+    "conceptFamily": "latent-reasoning"
+  },
+  {
+    "id": "trm",
+    "title": "Less is More: Recursive Reasoning with Tiny Networks",
+    "authors": ["Alexia Jolicoeur-Martineau"],
+    "year": 2025,
+    "venue": "arXiv:2510.04871",
+    "url": "https://arxiv.org/abs/2510.04871",
+    "centralClaim": "Tiny Recursive Model (TRM) with a single 2-layer network (7M params) achieves 45% ARC-AGI-1 and 8% ARC-AGI-2, outperforming HRM and most LLMs with <0.01% parameters. Recursive refinement in latent space enables strong reasoning in tiny networks.",
+    "evidenceType": "EXPERIMENTAL",
+    "relevantConcepts": ["recursive reasoning", "tiny networks", "latent state (y=solution, z=memory)", "EMA stabilization", "ACT halting"],
+    "keyResults": [
+      { "metric": "ARC-AGI-1 test accuracy", "value": "45%", "condition": "TRM (7M params)" },
+      { "metric": "ARC-AGI-1 test accuracy", "value": "40%", "condition": "HRM (27M params)" },
+      { "metric": "ARC-AGI-2 test accuracy", "value": "8%", "condition": "TRM" },
+      { "metric": "Sudoku-Extreme", "value": "87%", "condition": "TRM" },
+      { "metric": "Maze-Hard", "value": "85%", "condition": "TRM" }
+    ],
+    "limitations": [
+      "Optimal recursion depth exists (T=3,n=6 for TRM); more causes OOM",
+      "Task-specific architectures needed",
+      "Why recursion helps so much remains an open question",
+      "EMA required for training stability"
+    ],
+    "whatItDoesNotDemonstrate": [
+      "Does not show TRM works on language modeling tasks",
+      "Does not compare to HRM with matched compute budget",
+      "No evaluation on non-puzzle reasoning tasks"
+    ],
+    "evidenceLevel": "EXPERIMENTAL",
+    "conceptFamily": "latent-reasoning"
+  },
+  {
+    "id": "bdh",
+    "title": "The Dragon Hatchling: The Missing Link between the Transformer and Models of the Brain",
+    "authors": ["Adrian Kosowski", "Przemysław Uznański", "Jan Chorowski", "Zuzanna Stamirowska", "Michał Bartoszkiewicz"],
+    "year": 2025,
+    "venue": "arXiv:2509.26507",
+    "url": "https://arxiv.org/abs/2509.26507",
+    "github": "https://github.com/pathwaycom/bdh",
+    "centralClaim": "BDH is a post-Transformer architecture based on scale-free biologically inspired network of n locally-interacting neuron particles. Couples theoretical foundations and interpretability with Transformer-like performance. Attention emerges from local graph dynamics at neurons and synapses (\"Equations of Reasoning\").",
+    "evidenceType": "FORMAL_EXPERIMENTAL",
+    "relevantConcepts": ["synaptic memory", "local computation", "scale-free networks", "Hebbian learning", "neuron-synapse duality", "GPU-friendly formulation", "Equations of Reasoning"],
+    "keyResults": [
+      { "metric": "Language modeling perplexity", "value": "Matches GPT-2 scaling", "condition": "BDH-GPU 10M-1B params" },
+      { "metric": "Synaptic sparsity", "value": "~5% active", "condition": "Trained models" },
+      { "metric": "Modularity emergence", "value": "Scale-free graph structure", "condition": "Learned connectivity" },
+      { "metric": "Monosemanticity", "value": "Synapses correlate with concepts", "condition": "Post-hoc analysis" }
+    ],
+    "limitations": [
+      "Early stage; needs more real-world testing",
+      "Sudoku results from internal implementation not open-source repo",
+      "GPU-friendly formulation approximates idealized graph dynamics",
+      "Long-context behavior vs KV-cache not fully characterized"
+    ],
+    "whatItDoesNotDemonstrate": [
+      "Does not yet surpass Transformers on all language benchmarks",
+      "Does not prove brain-like architecture is necessary for reasoning",
+      "Independent replication of scaling laws pending"
+    ],
+    "evidenceLevel": "FORMAL",
+    "conceptFamily": "bdh"
+  },
+  {
+    "id": "bdh-cq",
+    "title": "BDH-CQ: In-Context Learning with Recurrent Latent Reasoning",
+    "authors": ["Björn Engdahl", "Adrian Kosowski", "Jan Chorowski", "Zuzanna Stamirowska", "Przemysław Uznański", "Junlin Jiang", "Rohan Phadke", "Remigiusz Kinas", "Richard Zhong"],
+    "year": 2026,
+    "venue": "arXiv:2608.09888",
+    "url": "https://arxiv.org/abs/2608.09888",
+    "centralClaim": "BDH-CQ combines in-context learning with recurrent latent reasoning. Demonstrations update recurrent memory sequentially; query solved through iterative latent computation without verbalizing intermediate reasoning. 150M params reaches 29.5% ARC-AGI-1 pass@2 at $0.0007/task.",
+    "evidenceType": "EXPERIMENTAL",
+    "relevantConcepts": ["recurrent memory", "in-context learning", "latent reasoning loop", "demonstration-memory-update", "query-latent-reasoning", "ARC-AGI"],
+    "keyResults": [
+      { "metric": "ARC-AGI-1 public evaluation (pass@2)", "value": "29.5%", "condition": "BDH-CQ 150M" },
+      { "metric": "ARC-AGI-1 cost per task", "value": "$0.00070", "condition": "H200 @ $3/hr" },
+      { "metric": "ConceptARC dense mappings", "value": "Strong extrapolation", "condition": "Propagation, copying tasks" },
+      { "metric": "Cost efficiency", "value": "57x cheaper than GPT-5.6 Luna (Low)", "condition": "At comparable accuracy" }
+    ],
+    "limitations": [
+      "Ordering, nesting, conditional rule selection remain difficult",
+      "Unseen parameter values and composition are failure modes",
+      "Controlled experiments show specific concept-dependent gaps",
+      "Visual reasoning only; language reasoning not evaluated"
+    ],
+    "whatItDoesNotDemonstrate": [
+      "Does not achieve SOTA accuracy on ARC (trades accuracy for cost)",
+      "Does not show generalization beyond ARC-like visual tasks",
+      "Does not evaluate on standard language benchmarks"
+    ],
+    "evidenceLevel": "EXPERIMENTAL",
+    "conceptFamily": "bdh-cq"
+  },
+  {
+    "id": "bdh-explainer-1",
+    "title": "Why BDH Uses a Brain-Inspired AI Architecture",
+    "authors": ["Pathway Team"],
+    "year": 2026,
+    "venue": "Pathway Research Blog",
+    "url": "https://pathway.com/research/bdh-explainer/brain-inspired-ai-architecture",
+    "centralClaim": "Transformer limitations (growing KV cache, dense computation, static weights) motivate brain-inspired design: neurons as computational units, synapses as memory, local computation, scale-free connectivity, and GPU-friendly implementation.",
+    "evidenceType": "EXPLANATORY",
+    "relevantConcepts": ["design requirements", "synaptic memory", "local computation", "scale-free networks", "KV-cache limitations"],
+    "keyResults": [],
+    "limitations": ["Explanatory material, not primary research"],
+    "whatItDoesNotDemonstrate": ["Not experimental evidence"],
+    "evidenceLevel": "EXPLANATORY",
+    "conceptFamily": "bdh"
+  },
+  {
+    "id": "bdh-explainer-2",
+    "title": "From Attention to Synapses: Deriving BDH",
+    "authors": ["Pathway Team"],
+    "year": 2026,
+    "venue": "Pathway Research Blog",
+    "url": "https://pathway.com/research/bdh-explainer/bdh-architecture-derivation",
+    "centralClaim": "BDH architecture derived mathematically from attention equations: attention reorganized as synaptic memory in high-dimensional sparse neuron space with Hebbian updates and low-rank factorization leading to practical BDH-GPU.",
+    "evidenceType": "DERIVATIONAL",
+    "relevantConcepts": ["attention-to-synapse derivation", "Hebbian updates", "low-rank factorization", "BDH-GPU", "Equations of Reasoning"],
+    "keyResults": [],
+    "limitations": ["Mathematical derivation; empirical validation in BDH paper"],
+    "whatItDoesNotDemonstrate": ["Not independent experimental evidence"],
+    "evidenceLevel": "FORMAL",
+    "conceptFamily": "bdh"
+  },
+  {
+    "id": "bdh-explainer-3",
+    "title": "What Emerges in Trained BDH Models: Graphs, Synapses, Scaling",
+    "authors": ["Pathway Team"],
+    "year": 2026,
+    "venue": "Pathway Research Blog",
+    "url": "https://pathway.com/research/bdh-explainer/emergent-properties",
+    "centralClaim": "Trained BDH models exhibit: recoverable graph structure, interpretable synapses/neurons, Transformer-like scaling laws, uniform sharding/growth, and path toward persistent latent reasoning.",
+    "evidenceType": "EXPERIMENTAL",
+    "relevantConcepts": ["emergent modularity", "scale-free structure", "interpretable synapses", "scaling laws", "model sharding"],
+    "keyResults": [],
+    "limitations": ["Based on internal Pathway experiments"],
+    "whatItDoesNotDemonstrate": ["Open-source replication pending"],
+    "evidenceLevel": "REPORTED_BY_AUTHORS",
+    "conceptFamily": "bdh"
+  }
+]

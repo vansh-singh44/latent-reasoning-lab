@@ -1,0 +1,170 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root {
+  --bg: #0a0f1a;
+  --panel: #111827;
+  --border: #2a3548;
+  --text: #e8edf5;
+  --accent: #00d4aa;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-lab-bg text-lab-text font-sans antialiased;
+  background: 
+    radial-gradient(ellipse at 20% 0%, rgba(0, 212, 170, 0.04) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, rgba(96, 165, 250, 0.03) 0%, transparent 50%),
+    var(--bg);
+  min-height: 100vh;
+}
+
+::selection {
+  @apply bg-lab-accent/30 text-lab-text;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-lab-bg;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-lab-border rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-lab-borderBright;
+}
+
+.focus-visible:focus {
+  @apply outline-none ring-2 ring-lab-accent ring-offset-2 ring-offset-lab-bg;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .animate-in {
+    animation: fadeIn 0.3s ease-out forwards;
+  }
+  
+  .glass-panel {
+    @apply bg-lab-panel/80 backdrop-blur-sm border border-lab-border;
+  }
+  
+  .glass-panel-strong {
+    @apply bg-lab-panel/95 backdrop-blur-md border border-lab-border;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply px-4 py-2 bg-lab-accent text-lab-bg font-medium rounded-lg 
+           hover:bg-lab-accentDim active:scale-[0.98] transition-all duration-150
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lab-accent focus-visible:ring-offset-2 focus-visible:ring-offset-lab-bg
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  
+  .btn-secondary {
+    @apply px-4 py-2 bg-lab-panelHover text-lab-text font-medium rounded-lg 
+           border border-lab-border hover:border-lab-borderBright hover:bg-lab-panel
+           active:scale-[0.98] transition-all duration-150
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lab-accent focus-visible:ring-offset-2 focus-visible:ring-offset-lab-bg;
+  }
+  
+  .btn-ghost {
+    @apply px-4 py-2 text-lab-textMuted font-medium rounded-lg 
+           hover:text-lab-text hover:bg-lab-panelHover
+           active:scale-[0.98] transition-all duration-150
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lab-accent focus-visible:ring-offset-2 focus-visible:ring-offset-lab-bg;
+  }
+  
+  .input-field {
+    @apply w-full px-3 py-2 bg-lab-bg border border-lab-border rounded-lg 
+           text-lab-text placeholder-lab-textMuted
+           focus:border-lab-accent focus:ring-1 focus:ring-lab-accent
+           transition-colors duration-150;
+  }
+  
+  .slider-input {
+    @apply w-full h-2 bg-lab-border rounded-full appearance-none cursor-pointer;
+  }
+  
+  .slider-input::-webkit-slider-thumb {
+    @apply appearance-none w-5 h-5 bg-lab-accent rounded-full 
+           hover:scale-110 transition-transform duration-100;
+  }
+  
+  .card {
+    @apply glass-panel rounded-xl p-5 transition-all duration-200
+           hover:border-lab-borderBright hover:shadow-lab;
+  }
+  
+  .badge {
+    @apply px-2 py-0.5 text-xs font-medium rounded-full;
+  }
+  
+  .badge-live {
+    @apply badge bg-lab-accentBg text-lab-accent border border-lab-accent/30;
+  }
+  
+  .badge-precomputed {
+    @apply badge bg-lab-infoBg text-lab-info border border-lab-info/30;
+  }
+  
+  .badge-published {
+    @apply badge bg-lab-warningBg text-lab-warning border border-lab-warning/30;
+  }
+  
+  .badge-toy {
+    @apply badge bg-lab-panelHover text-lab-textMuted border border-lab-border;
+  }
+  
+  .evidence-badge {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-mono rounded-md;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .container {
+    @apply px-4;
+  }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}

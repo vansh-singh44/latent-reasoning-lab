@@ -9,60 +9,7 @@ import { Slider, Toggle, Select, ButtonGroup } from '@/components/controls/Contr
 import { useExperimentStore, runExperiment, ExperimentConfig } from '@/lib/experiment';
 import { cn, formatPercent, formatNumber } from '@/lib/utils';
 import { useEffect, useState, useCallback } from 'react';
-import { AlertTriangle, Zap, Brain, XCircle, CheckCircle, RefreshCw, SlidersHorizontal, Bug, Flame } from 'lucide-react';
-
-const FAILURE_MODES = [
-  {
-    id: 'saturation',
-    title: 'State Saturation',
-    description: 'Hidden state stops changing — additional recurrent steps produce negligible updates.',
-    trigger: 'High depth + low decay',
-    icon: BatteryIcon,
-  },
-  {
-    id: 'oscillation',
-    title: 'Oscillatory Behavior',
-    description: 'State cycles between patterns without converging to a stable solution.',
-    trigger: 'High recurrence + specific weight init',
-    icon: WaveIcon,
-  },
-  {
-    id: 'forgetting',
-    title: 'Catastrophic Forgetting',
-    description: 'New demonstrations overwrite previous memory; early demos lost.',
-    trigger: 'Many demos + high interference',
-    icon: Brain,
-  },
-  {
-    id: 'interference',
-    title: 'Demonstration Interference',
-    description: 'Contradictory or noisy demos corrupt recurrent memory.',
-    trigger: 'Conflicting demos + high interference',
-    icon: XCircle,
-  },
-  {
-    id: 'noise',
-    title: 'Noise Amplification',
-    description: 'Small noise compounds over recurrent steps, degrading accuracy.',
-    trigger: 'High noise + high depth',
-    icon: Zap,
-  },
-  {
-    id: 'dimension',
-    title: 'Insufficient State Capacity',
-    description: 'State dimension too small to encode task rule + demonstrations.',
-    trigger: 'Low state_dim + complex task',
-    icon: SlidersHorizontal,
-  },
-];
-
-// Simple icons
-function BatteryIcon({ className }: { className?: string }) {
-  return <svg className={className} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="1" y="4" width="16" height="16" rx="2"/><line x1="17" y1="9" x2="17" y2="15"/></svg>
-}
-function WaveIcon({ className }: { className?: string }) {
-  return <svg className={className} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 12c3-6 7-6 10 0 3 6 7 6 10 0"/></svg>
-}
+import { AlertTriangle, Zap, Brain, XCircle, CheckCircle, RefreshCw, SlidersHorizontal, Bug, Flame, Battery, Waves } from 'lucide-react';
 
 interface FailureCase {
   id: string;
@@ -82,7 +29,7 @@ const FAILURE_CASES: FailureCase[] = [
     config: { recurrentDepth: 32, stateDecay: 0.99, stateDim: 32 },
     expectedOutcome: 'State change magnitude → 0; accuracy plateaus',
     trigger: 'High depth + high decay',
-    icon: <BatteryIcon className="w-6 h-6" />,
+    icon: <Battery className="w-6 h-6" />,
   },
   {
     id: 'oscillation',
@@ -91,7 +38,7 @@ const FAILURE_CASES: FailureCase[] = [
     config: { recurrentDepth: 24, stateDecay: 0.5, stateDim: 64, noiseLevel: 0.1 },
     expectedOutcome: 'State change oscillates; accuracy non-monotonic',
     trigger: 'High recurrence + specific weight init',
-    icon: <WaveIcon className="w-6 h-6" />,
+    icon: <Waves className="w-6 h-6" />,
   },
   {
     id: 'forgetting',

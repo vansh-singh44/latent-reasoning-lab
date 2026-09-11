@@ -568,7 +568,7 @@ interface ExperimentState {
   reset: () => void;
 }
 
-export const useExperimentStore = create<ExperimentState>()(
+const createStore = () => create<ExperimentState>()(
   persist(
     (set, get) => ({
       config: DEFAULT_CONFIG,
@@ -581,7 +581,6 @@ export const useExperimentStore = create<ExperimentState>()(
       
       runExperiment: () => {
         set({ isRunning: true });
-        // Use setTimeout instead of requestAnimationFrame for SSR compatibility
         setTimeout(() => {
           const result = runExperiment(get().config);
           set({ result, isRunning: false });
@@ -608,3 +607,26 @@ export const useExperimentStore = create<ExperimentState>()(
     { name: 'latent-reasoning-lab-experiment' }
   )
 );
+
+// Client-side only store to avoid hydration issues
+let store: ReturnType<typeof createStore> | null = null;
+
+export const useExperimentStore = () => {
+  if (typeof window !== 'undefined') {
+    if (!store) store = createStore();
+    return store();
+  }
+  // Server-side: return a minimal store without persist
+  return create<ExperimentState>()((set) => ({
+    config: DEFAULT_CONFIG,
+    result: null,
+    recurrentDepthResults: null,
+    isRunning: false,
+    guidedStep: 0,
+    setConfig: (newConfig) => set({ config: { ...DEFAULT_CONFIG, ...newConfig } }),
+    runExperiment: () => {},
+    runDepthSweep: () => {},
+    setGuidedStep: (step) => set({ guidedStep: step }),
+    reset: () => set({ config: DEFAULT_CONFIG, result: null, recurrentDepthResults: null, guidedStep: 0 }),
+  }))();
+};

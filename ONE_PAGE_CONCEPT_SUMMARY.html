@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latent Reasoning Lab - One Page Concept Summary</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'IBM Plex Sans', 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: #1a1a2e;
+            background: #fff;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        h1 { font-size: 2.5rem; margin-bottom: 0.5rem; color: #1a1a2e; }
+        h2 { font-size: 1.5rem; margin-top: 2rem; margin-bottom: 1rem; color: #1a1a2e; border-bottom: 2px solid #00d4aa; padding-bottom: 0.5rem; }
+        h3 { font-size: 1.2rem; margin-top: 1.5rem; margin-bottom: 0.5rem; color: #333; }
+        p { margin-bottom: 1rem; text-align: justify; }
+        ul { margin: 1rem 0 1rem 1.5rem; }
+        li { margin-bottom: 0.5rem; }
+        strong { color: #1a1a2e; }
+        code { background: #f0f0f0; padding: 0.2em 0.4em; border-radius: 3px; font-family: 'IBM Plex Mono', monospace; font-size: 0.9em; }
+        pre { background: #1a1a2e; color: #e8edf5; padding: 1rem; border-radius: 6px; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+        th, td { border: 1px solid #ddd; padding: 0.5rem; text-align: left; }
+        th { background: #f5f5f5; }
+        .header { text-align: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 3px solid #00d4aa; }
+        .header h1 { margin-bottom: 0.5rem; }
+        .header p { color: #666; font-size: 1.1rem; }
+        .footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid #eee; text-align: center; color: #666; font-size: 0.9rem; }
+        .tag { display: inline-block; background: #e8f5e9; color: #00a86b; padding: 0.2em 0.6em; border-radius: 4px; font-size: 0.8rem; font-weight: 600; margin-right: 0.5rem; }
+        @media print {
+            body { padding: 0; }
+            .no-print { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Latent Reasoning Lab — One-Page Concept Summary</h1>
+        <p>DataForge 2026 × Pathway Track Submission</p>
+    </div>
+
+    <h2>The Core Idea</h2>
+    <p><strong>How can an AI "think more" without saying more?</strong></p>
+    <p>Modern AI reasoning is dominated by Chain-of-Thought (CoT): models "think" by generating more text tokens. But a growing body of research shows that reasoning can happen in <strong>latent space</strong> — by repeatedly updating a hidden state vector without emitting intermediate natural-language tokens. This architectural shift changes fundamental trade-offs around compute efficiency, memory usage, latency, and observability.</p>
+
+    <h2>Technical Mechanism</h2>
+    <h3>Token-Based Reasoning (Status Quo)</h3>
+    <ul>
+        <li><strong>Intermediate representation:</strong> Text tokens appended to context</li>
+        <li><strong>Additional compute:</strong> Generate more tokens (linear context growth)</li>
+        <li><strong>Memory:</strong> KV cache grows O(context × hidden_dim)</li>
+        <li><strong>Observability:</strong> High — human-readable reasoning trace</li>
+    </ul>
+
+    <h3>Latent Recurrent Reasoning (Emerging Paradigm)</h3>
+    <ul>
+        <li><strong>Intermediate representation:</strong> Hidden state vector h ∈ ℝⁿ</li>
+        <li><strong>Additional compute:</strong> Recurrent update hₜ₊₁ = f(hₜ, x)</li>
+        <li><strong>Memory:</strong> Fixed-size state O(n²) independent of reasoning depth</li>
+        <li><strong>Observability:</strong> Low — requires probes/visualization tools</li>
+    </ul>
+
+    <h2>Key Research Foundations</h2>
+    <table>
+        <thead>
+            <tr><th>Paper</th><th>Core Contribution</th><th>Key Result</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>Coconut (Hao et al., ICLR 2025)</td><td>Continuous thought = last hidden state as next input embedding</td><td>ProsQA: 67.8% vs 54.2% CoT on GPT-2</td></tr>
+            <tr><td>Recurrent Depth (Geiping et al., NeurIPS 2025)</td><td>Depth-recurrent transformer scales test-time compute</td><td>GSM8K 22.4% → 58.7% (r=1→32)</td></tr>
+            <tr><td>TRM (Jolicoeur-Martineau, 2025)</td><td>Single tiny network (7M) with recursive refinement</td><td>45% ARC-AGI-1, beats LLMs with <0.01% params</td></tr>
+            <tr><td>BDH (Kosowski et al., 2025)</td><td>Attention = synaptic memory in local graph dynamics</td><td>Matches Transformer scaling; 5% sparse activations</td></tr>
+            <tr><td>BDH-CQ (Engdahl et al., 2026)</td><td>Demos → recurrent memory → latent reasoning loop</td><td>29.5% ARC-AGI-1 at $0.0007/task (57× cheaper than GPT-5.6)</td></tr>
+        </tbody>
+    </table>
+
+    <h2>BDH & BDH-CQ Connection</h2>
+    <p><strong>BDH (Dragon Hatchling)</strong> re-derives attention from biologically-inspired principles: neurons with sparse ReLU activations, synapses with Hebbian updates, local message passing. Attention emerges from synaptic state ρ = Σ VₜKₜᵀUᵗ⁻ᵀ. Fixed-size synaptic state replaces growing KV cache.</p>
+    <p><strong>BDH-CQ</strong> adds in-context learning: demonstrations sequentially update recurrent synaptic memory (ρ ← ρ + η·h·xᵀ), then queries are solved through iterative latent reasoning without verbalizing intermediate steps. 29.5% ARC-AGI-1 pass@2 at $0.0007/task — 57× cheaper than GPT-5.6.</p>
+
+    <h2>Why It Matters</h2>
+    <ul>
+        <li><strong>Compute efficiency:</strong> Decouples reasoning depth from context length</li>
+        <li><strong>Memory architecture:</strong> Fixed-size state vs. growing KV cache</li>
+        <li><strong>Adaptive compute:</strong> Easy problems exit early; hard problems iterate longer</li>
+        <li><strong>Cost frontier:</strong> BDH-CQ achieves 57× cost reduction vs GPT-5.6 at comparable accuracy</li>
+    </ul>
+
+    <h2>Limitations (Honest Assessment)</h2>
+    <ul>
+        <li><strong>Observability gap:</strong> Hidden states require probes; no free lunch on interpretability</li>
+        <li><strong>Diminishing returns:</strong> Accuracy plateaus; excessive recurrence causes saturation/oscillation</li>
+        <li><strong>Memory fragility:</strong> Recurrent state overwritten by interference/forgetting</li>
+        <li><strong>Composition gaps:</strong> BDH-CQ struggles with composition, ordering, nesting (16-31% on ConceptARC)</li>
+        <li><strong>Training instability:</strong> Coconut needs careful curriculum; recurrent depth needs careful init</li>
+    </ul>
+
+    <h2>Evidence Discipline</h2>
+    <p>Every claim in this submission is labeled: <span class="tag">LIVE TOY</span> (browser computation), <span class="tag">PUBLISHED</span> (from cited paper), <span class="tag">TOY</span> (pedagogical), <span class="tag">ILLUSTRATIVE</span> (conceptual diagram). No toy result is presented as a published result.</p>
+
+    <h2>The Latent Reasoning Lab Artifact</h2>
+    <p>An interactive browser-based laboratory where learners:</p>
+    <ol>
+        <li>Toggle between token vs latent reasoning on the same task</li>
+        <li>Slide recurrent depth (1→32) and watch accuracy/compute trade-offs</li>
+        <li>Watch hidden state heatmaps evolve in real-time</li>
+        <li>Add demonstrations → watch recurrent memory update → query solved via latent loop</li>
+        <li>Break the reasoner: add noise, interference, reduce state dim, increase depth</li>
+        <li>Take a 7-question quiz + free-response with transparent rubric</li>
+    </ol>
+
+    <div class="footer">
+        <p>Latent Reasoning Lab — DataForge 2026 × Pathway Track | <a href="https://github.com/vansh-singh44/latent-reasoning-lab">GitHub</a> | <a href="https://latent-reasoning-lab.vercel.app">Live Demo</a></p>
+    </div>
+
+    <div class="no-print" style="margin-top: 2rem; padding: 1rem; background: #f5f5f5; border-radius: 8px;">
+        <strong>To create PDF:</strong> Open this file in browser → Print (Ctrl+P) → Save as PDF
+    </div>
+</body>
+</html>

@@ -581,19 +581,19 @@ export const useExperimentStore = create<ExperimentState>()(
       
       runExperiment: () => {
         set({ isRunning: true });
-        // Use requestAnimationFrame to not block UI
-        requestAnimationFrame(() => {
+        // Use setTimeout instead of requestAnimationFrame for SSR compatibility
+        setTimeout(() => {
           const result = runExperiment(get().config);
           set({ result, isRunning: false });
-        });
+        }, 0);
       },
       
       runDepthSweep: () => {
         set({ isRunning: true });
-        requestAnimationFrame(() => {
+        setTimeout(() => {
           const results = runRecurrentDepthSweep(get().config);
           set({ recurrentDepthResults: results, isRunning: false });
-        });
+        }, 0);
       },
       
       setGuidedStep: (step) => set({ guidedStep: step }),

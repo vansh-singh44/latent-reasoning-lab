@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
 
 // ============================================
 // Types
@@ -568,65 +567,40 @@ interface ExperimentState {
   reset: () => void;
 }
 
-const createStore = () => create<ExperimentState>()(
-  persist(
-    (set, get) => ({
-      config: DEFAULT_CONFIG,
-      result: null,
-      recurrentDepthResults: null,
-      isRunning: false,
-      guidedStep: 0,
-      
-      setConfig: (newConfig) => set({ config: { ...get().config, ...newConfig } }),
-      
-      runExperiment: () => {
-        set({ isRunning: true });
-        setTimeout(() => {
-          const result = runExperiment(get().config);
-          set({ result, isRunning: false });
-        }, 0);
-      },
-      
-      runDepthSweep: () => {
-        set({ isRunning: true });
-        setTimeout(() => {
-          const results = runRecurrentDepthSweep(get().config);
-          set({ recurrentDepthResults: results, isRunning: false });
-        }, 0);
-      },
-      
-      setGuidedStep: (step) => set({ guidedStep: step }),
-      
-      reset: () => set({ 
-        config: DEFAULT_CONFIG, 
-        result: null, 
-        recurrentDepthResults: null,
-        guidedStep: 0 
-      }),
-    }),
-    { name: 'latent-reasoning-lab-experiment' }
-  )
-);
-
-// Client-side only store to avoid hydration issues
-let store: ReturnType<typeof createStore> | null = null;
-
-export const useExperimentStore = () => {
-  if (typeof window !== 'undefined') {
-    if (!store) store = createStore();
-    return store();
-  }
-  // Server-side: return a minimal store without persist
-  return create<ExperimentState>()((set) => ({
+// Simple store without persist to avoid SSR issues
+export const useExperimentStore = create<ExperimentState>()(
+  (set, get) => ({
     config: DEFAULT_CONFIG,
     result: null,
     recurrentDepthResults: null,
     isRunning: false,
     guidedStep: 0,
-    setConfig: (newConfig) => set({ config: { ...DEFAULT_CONFIG, ...newConfig } }),
-    runExperiment: () => {},
-    runDepthSweep: () => {},
+    
+    setConfig: (newConfig) => set({ config: { ...get().config, ...newConfig } }),
+    
+    runExperiment: () => {
+      set({ isRunning: true });
+      setTimeout(() => {
+        const result = runExperiment(get().config);
+        set({ result, isRunning: false });
+      }, 0);
+    },
+    
+    runDepthSweep: () => {
+      set({ isRunning: true });
+      setTimeout(() => {
+        const results = runRecurrentDepthSweep(get().config);
+        set({ recurrentDepthResults: results, isRunning: false });
+      }, 0);
+    },
+    
     setGuidedStep: (step) => set({ guidedStep: step }),
-    reset: () => set({ config: DEFAULT_CONFIG, result: null, recurrentDepthResults: null, guidedStep: 0 }),
-  }))();
-};
+    
+    reset: () => set({ 
+      config: DEFAULT_CONFIG, 
+      result: null, 
+      recurrentDepthResults: null,
+      guidedStep: 0 
+    }),
+  })
+);

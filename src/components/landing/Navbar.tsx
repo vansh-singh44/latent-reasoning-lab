@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { Menu, X, Sun, Moon, Zap } from 'lucide-react';
+import { Menu, X, Sun, Moon, Zap, Keyboard } from 'lucide-react';
 
 const NAV_LINKS = [
   { href: '/', label: 'Home' },
@@ -19,6 +19,7 @@ export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDark, setIsDark] = useState(false);
+  const [showShortcuts, setShowShortcuts] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -42,6 +43,67 @@ export function Navbar() {
     document.documentElement.classList.toggle('dark', newTheme);
   };
 
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Don't trigger shortcuts when typing in inputs
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
+        return;
+      }
+
+      // Handle shortcuts
+      switch (e.key.toLowerCase()) {
+        case 'd':
+          if (e.altKey || e.metaKey || e.ctrlKey) {
+            e.preventDefault();
+            toggleTheme();
+          }
+          break;
+        case 'r':
+          if (e.altKey || e.metaKey || e.ctrlKey) {
+            e.preventDefault();
+            // Trigger re-run experiment if on experiments page
+            const event = new CustomEvent('rerun-experiment');
+            window.dispatchEvent(event);
+          }
+          break;
+        case 'k':
+          if (e.altKey || e.metaKey || e.ctrlKey) {
+            e.preventDefault();
+            setShowShortcuts(!showShortcuts);
+          }
+          break;
+        case 'escape':
+          setIsMobileMenuOpen(false);
+          setShowShortcuts(false);
+          break;
+        case '/':
+          if (e.altKey || e.metaKey || e.ctrlKey) {
+            e.preventDefault();
+            setShowShortcuts(!showShortcuts);
+          }
+          break;
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+          if (e.altKey || e.metaKey || e.ctrlKey) {
+            e.preventDefault();
+            const index = parseInt(e.key) - 1;
+            const links = ['/', '/experiments', '/research', '/docs', '/about'];
+            if (links[index]) {
+              window.location.href = links[index];
+            }
+          }
+          break;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isDark, showShortcuts]);
+
   return (
     <header className={cn(
       'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
@@ -59,7 +121,7 @@ export function Navbar() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex md:items-center md:gap-8">
-            {NAV_LINKS.map((link) => {
+            {NAV_LINKS.map((link, index) => {
               const isActive = pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href));
               return (
                 <Link
@@ -72,6 +134,7 @@ export function Navbar() {
                       : 'text-lab-textMuted hover:text-lab-text'
                   )}
                   aria-current={isActive ? 'page' : undefined}
+                  aria-label={`${link.label} ${index + 1 === 1 ? '(Alt+1)' : index + 1 === 2 ? '(Alt+2)' : index + 1 === 3 ? '(Alt+3)' : index + 1 === 4 ? '(Alt+4)' : '(Alt+5)'}`}
                 >
                   {link.label}
                   {isActive && (
@@ -83,12 +146,21 @@ export function Navbar() {
           </div>
 
           {/* Right Side Actions */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            {/* Keyboard Shortcuts */}
+            <button
+              onClick={() => setShowShortcuts(!showShortcuts)}
+              className="p-2 rounded-lg text-lab-textMuted hover:text-lab-text hover:bg-lab-panelHover transition-colors"
+              aria-label="Show keyboard shortcuts (Alt+K)"
+            >
+              <Keyboard className="w-5 h-5" aria-hidden="true" />
+            </button>
+
             {/* Theme Toggle */}
             <button
               onClick={toggleTheme}
               className="p-2 rounded-lg text-lab-textMuted hover:text-lab-text hover:bg-lab-panelHover transition-colors"
-              aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+              aria-label={isDark ? 'Switch to light mode (Alt+D)' : 'Switch to dark mode (Alt+D)'}
             >
               {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
@@ -135,17 +207,70 @@ export function Navbar() {
                   </Link>
                 );
               })}
-              <div className="pt-4 border-t border-lab-border flex items-center gap-3">
+              <div className="pt-4 border-t border-lab-border flex flex-col gap-2">
                 <button
                   onClick={toggleTheme}
-                  className="flex-1 btn-secondary text-sm justify-center"
+                  className="btn-secondary text-sm justify-center"
                 >
                   {isDark ? '☀️ Light' : '🌙 Dark'}
                 </button>
-                <Link href="/experiments" className="flex-1 btn-primary text-sm text-center">
+                <Link href="/experiments" className="btn-primary text-sm text-center">
                   Get Started
                 </Link>
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* Keyboard Shortcuts Modal */}
+        {showShortcuts && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm animate-in" role="dialog" aria-modal="true" aria-labelledby="shortcuts-title">
+            <div className="bg-lab-panel border border-lab-border rounded-2xl p-6 max-w-md w-full mx-4 max-h-[80vh] overflow-y-auto animate-in">
+              <div className="flex items-center justify-between mb-6">
+                <h2 id="shortcuts-title" className="font-display text-xl font-semibold text-lab-text">Keyboard Shortcuts</h2>
+                <button
+                  onClick={() => setShowShortcuts(false)}
+                  className="p-1 rounded-lg text-lab-textMuted hover:text-lab-text hover:bg-lab-panelHover transition-colors"
+                  aria-label="Close shortcuts"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              
+              <dl className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <dt className="text-lab-textMuted text-sm">Theme</dt>
+                  <dd className="font-mono text-sm text-lab-accent">Alt + D</dd>
+                  
+                  <dt className="text-lab-textMuted text-sm">Re-run Experiment</dt>
+                  <dd className="font-mono text-sm text-lab-accent">Alt + R</dd>
+                  
+                  <dt className="text-lab-textMuted text-sm">Shortcuts Help</dt>
+                  <dd className="font-mono text-sm text-lab-accent">Alt + K / ?</dd>
+                  
+                  <dt className="text-lab-textMuted text-sm">Navigate Home</dt>
+                  <dd className="font-mono text-sm text-lab-accent">Alt + 1</dd>
+                  
+                  <dt className="text-lab-textMuted text-sm">Navigate Experiments</dt>
+                  <dd className="font-mono text-sm text-lab-accent">Alt + 2</dd>
+                  
+                  <dt className="text-lab-textMuted text-sm">Navigate Research</dt>
+                  <dd className="font-mono text-sm text-lab-accent">Alt + 3</dd>
+                  
+                  <dt className="text-lab-textMuted text-sm">Navigate Docs</dt>
+                  <dd className="font-mono text-sm text-lab-accent">Alt + 4</dd>
+                  
+                  <dt className="text-lab-textMuted text-sm">Navigate About</dt>
+                  <dd className="font-mono text-sm text-lab-accent">Alt + 5</dd>
+                </div>
+              </dl>
+              
+              <button
+                onClick={() => setShowShortcuts(false)}
+                className="mt-6 btn-primary w-full"
+              >
+                Got it
+              </button>
             </div>
           </div>
         )}

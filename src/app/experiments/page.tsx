@@ -9,7 +9,8 @@ import { Slider, Toggle, Select, NumberInput, ButtonGroup } from '@/components/c
 import { useExperimentStore, DEFAULT_CONFIG, runExperiment, runRecurrentDepthSweep, ExperimentConfig } from '@/lib/experiment';
 import { cn, formatPercent, formatNumber } from '@/lib/utils';
 import { useEffect, useState, useCallback } from 'react';
-import { FlaskConical, Zap, Brain, GitBranch, ArrowRight, AlertTriangle, CheckCircle, XCircle, Settings, BarChart3, RefreshCw } from 'lucide-react';
+import { FlaskConical, Zap, Brain, GitBranch, ArrowRight, AlertTriangle, CheckCircle, XCircle, Settings, BarChart3, RefreshCw, Download } from 'lucide-react';
+import { ExportButtons } from '@/components/landing/ExportButtons';
 
 const EXPERIMENTS = [
   {
@@ -476,6 +477,7 @@ export default function ExperimentsPage() {
             <BarChart3 className="w-4 h-4 mr-2" />
             Sweep Depth
           </button>
+          <ExportButtons />
         </div>
       </EvidencePanel>
     </PageLayout>

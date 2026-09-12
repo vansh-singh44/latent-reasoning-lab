@@ -5,11 +5,45 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
 :root {
+  /* Light mode (default) */
   --bg: #faf9f6;
+  --bg-alt: #f5f3ef;
   --panel: #ffffff;
+  --panel-hover: #faf9f6;
   --border: #e5e2db;
+  --border-bright: #d8d4cb;
   --text: #1a1a1a;
+  --text-muted: #6b6b6b;
   --accent: #00a878;
+  --accent-dim: #008f66;
+  --accent-bg: #e8f5ee;
+  --warning: #d4a017;
+  --warning-bg: #fef3e2;
+  --danger: #d64545;
+  --danger-bg: #fef2f2;
+  --info: #2563eb;
+  --info-bg: #eff6ff;
+}
+
+/* Dark mode variables */
+.dark {
+  --bg: #0a0f1a;
+  --bg-alt: #111827;
+  --panel: #141b2d;
+  --panel-hover: #1a2234;
+  --border: #2a3548;
+  --border-bright: #3d4a6b;
+  --text: #f0f4f8;
+  --text-muted: #a0aec0;
+  --accent: #00d4aa;
+  --accent-dim: #00b896;
+  --accent-bg: #052e26;
+  --warning: #ffb84d;
+  --warning-bg: #3d2a0a;
+  --danger: #ff6b6b;
+  --danger-bg: #3d1a1a;
+  --info: #60a5fa;
+  --info-bg: #1a2a4a;
 }
 
 * {
@@ -27,15 +61,15 @@ body {
     radial-gradient(ellipse at 80% 100%, rgba(37, 99, 235, 0.03) 0%, transparent 50%),
     var(--bg);
   min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Dark mode support */
+/* Dark mode background */
 .dark body {
-  @apply bg-lab-bg text-lab-text;
   background: 
     radial-gradient(ellipse at 20% 0%, rgba(0, 212, 170, 0.04) 0%, transparent 50%),
     radial-gradient(ellipse at 80% 100%, rgba(96, 165, 250, 0.03) 0%, transparent 50%),
-    #0a0f1a;
+    var(--bg);
 }
 
 ::selection {
@@ -110,6 +144,11 @@ body {
            transition-colors duration-150;
   }
   
+  .dark .input-field {
+    @apply bg-lab-bgAlt border-lab-border text-lab-text placeholder-lab-textMuted
+           focus:border-lab-accent focus:ring-lab-accent;
+  }
+  
   .slider-input {
     @apply w-full h-2 bg-lab-border rounded-full appearance-none cursor-pointer;
   }
@@ -124,6 +163,10 @@ body {
            hover:border-lab-borderBright hover:shadow-lab;
   }
   
+  .dark .card {
+    @apply bg-lab-panel/90 border-lab-border hover:border-lab-borderBright hover:shadow-dark-glow;
+  }
+  
   .badge {
     @apply px-2 py-0.5 text-xs font-medium rounded-full;
   }
@@ -132,20 +175,45 @@ body {
     @apply badge bg-lab-accentBg text-lab-accent border border-lab-accent/30;
   }
   
+  .dark .badge-live {
+    @apply bg-lab-accentBg/50 text-lab-accent border-lab-accent/30;
+  }
+  
   .badge-precomputed {
     @apply badge bg-lab-infoBg text-lab-info border border-lab-info/30;
+  }
+  
+  .dark .badge-precomputed {
+    @apply bg-lab-infoBg/50 text-lab-info border-lab-info/30;
   }
   
   .badge-published {
     @apply badge bg-lab-warningBg text-lab-warning border border-lab-warning/30;
   }
   
+  .dark .badge-published {
+    @apply bg-lab-warningBg/50 text-lab-warning border-lab-warning/30;
+  }
+  
   .badge-toy {
     @apply badge bg-lab-bgAlt text-lab-textMuted border border-lab-border;
   }
   
+  .dark .badge-toy {
+    @apply bg-lab-bgAlt text-lab-textMuted border-lab-border;
+  }
+  
   .evidence-badge {
     @apply inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-mono rounded-md;
+  }
+  
+  /* Skeleton loading */
+  .skeleton {
+    @apply animate-pulse bg-lab-bgAlt rounded;
+  }
+  
+  .dark .skeleton {
+    @apply bg-lab-bgAlt;
   }
 }
 
@@ -178,24 +246,24 @@ body {
   border-width: 0;
 }
 
-/* Light mode specific overrides */
-@media (prefers-color-scheme: light) {
-  :root:not(.dark) {
-    --bg: #faf9f6;
-    --panel: #ffffff;
-    --border: #e5e2db;
-    --text: #1a1a1a;
-    --accent: #00a878;
-  }
+/* Keyboard focus visible styles */
+:focus-visible {
+  @apply outline-none ring-2 ring-lab-accent ring-offset-2 ring-offset-lab-bg;
 }
 
-/* Dark mode specific overrides */
-@media (prefers-color-scheme: dark) {
-  :root.dark {
-    --bg: #0a0f1a;
-    --panel: #111827;
-    --border: #2a3548;
-    --text: #e8edf5;
-    --accent: #00d4aa;
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --text: #000;
+    --text-muted: #333;
+    --border: #000;
+    --border-bright: #000;
+  }
+  
+  .dark {
+    --text: #fff;
+    --text-muted: #ccc;
+    --border: #fff;
+    --border-bright: #fff;
   }
 }

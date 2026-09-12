@@ -7,3 +7,4 @@ export { TokenVsLatent } from './TokenVsLatent';
 export { ResearchSection } from './ResearchSection';
 export { CTA } from './CTA';
 export { Footer } from './Footer';
+export { ExportButtons } from './ExportButtons';

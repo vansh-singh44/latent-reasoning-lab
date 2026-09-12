@@ -13,23 +13,44 @@ const config: Config = {
       colors: {
         lab: {
           // Light/Cream theme
-          bg: '#faf9f6',           // Cream white
-          bgAlt: '#f5f3ef',        // Slightly darker cream
-          panel: '#ffffff',        // Pure white panels
-          panelHover: '#faf9f6',   // Cream on hover
-          border: '#e5e2db',       // Light border
-          borderBright: '#d8d4cb', // Slightly darker border
-          text: '#1a1a1a',         // Near black text
-          textMuted: '#6b6b6b',    // Muted gray text
-          accent: '#00a878',       // Teal green (accessible on light)
-          accentDim: '#008f66',    // Darker teal
-          accentBg: '#e8f5ee',     // Light teal background
-          warning: '#d4a017',      // Gold/amber
-          warningBg: '#fef3e2',    // Light warning background
-          danger: '#d64545',       // Red
-          dangerBg: '#fef2f2',     // Light danger background
-          info: '#2563eb',         // Blue
-          infoBg: '#eff6ff',       // Light info background
+          bg: '#faf9f6',
+          bgAlt: '#f5f3ef',
+          panel: '#ffffff',
+          panelHover: '#faf9f6',
+          border: '#e5e2db',
+          borderBright: '#d8d4cb',
+          text: '#1a1a1a',
+          textMuted: '#6b6b6b',
+          accent: '#00a878',
+          accentDim: '#008f66',
+          accentBg: '#e8f5ee',
+          warning: '#d4a017',
+          warningBg: '#fef3e2',
+          danger: '#d64545',
+          dangerBg: '#fef2f2',
+          info: '#2563eb',
+          infoBg: '#eff6ff',
+
+          // Dark mode (WCAG AA compliant)
+          dark: {
+            bg: '#0a0f1a',
+            bgAlt: '#111827',
+            panel: '#141b2d',
+            panelHover: '#1a2234',
+            border: '#2a3548',
+            borderBright: '#3d4a6b',
+            text: '#f0f4f8',
+            textMuted: '#a0aec0',
+            accent: '#00d4aa',
+            accentDim: '#00b896',
+            accentBg: '#052e26',
+            warning: '#ffb84d',
+            warningBg: '#3d2a0a',
+            danger: '#ff6b6b',
+            dangerBg: '#3d1a1a',
+            info: '#60a5fa',
+            infoBg: '#1a2a4a',
+          },
         },
       },
       fontFamily: {
@@ -61,6 +82,7 @@ const config: Config = {
         'lab': '0 4px 24px rgba(0, 0, 0, 0.06), 0 0 1px rgba(0, 0, 0, 0.04)',
         'lab-lg': '0 8px 48px rgba(0, 0, 0, 0.08), 0 0 1px rgba(0, 0, 0, 0.04)',
         'inner-glow': 'inset 0 0 20px rgba(0, 168, 120, 0.1)',
+        'dark-glow': 'inset 0 0 20px rgba(0, 212, 170, 0.15)',
       },
     },
   },

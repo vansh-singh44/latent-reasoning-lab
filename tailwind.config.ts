@@ -12,22 +12,24 @@ const config: Config = {
     extend: {
       colors: {
         lab: {
-          bg: '#0a0f1a',
-          panel: '#111827',
-          panelHover: '#1a2234',
-          border: '#2a3548',
-          borderBright: '#3d4a6b',
-          text: '#e8edf5',
-          textMuted: '#8b9ab8',
-          accent: '#00d4aa',
-          accentDim: '#00a888',
-          accentBg: '#052e26',
-          warning: '#ffb84d',
-          warningBg: '#3d2a0a',
-          danger: '#ff6b6b',
-          dangerBg: '#3d1a1a',
-          info: '#60a5fa',
-          infoBg: '#1a2a4a',
+          // Light/Cream theme
+          bg: '#faf9f6',           // Cream white
+          bgAlt: '#f5f3ef',        // Slightly darker cream
+          panel: '#ffffff',        // Pure white panels
+          panelHover: '#faf9f6',   // Cream on hover
+          border: '#e5e2db',       // Light border
+          borderBright: '#d8d4cb', // Slightly darker border
+          text: '#1a1a1a',         // Near black text
+          textMuted: '#6b6b6b',    // Muted gray text
+          accent: '#00a878',       // Teal green (accessible on light)
+          accentDim: '#008f66',    // Darker teal
+          accentBg: '#e8f5ee',     // Light teal background
+          warning: '#d4a017',      // Gold/amber
+          warningBg: '#fef3e2',    // Light warning background
+          danger: '#d64545',       // Red
+          dangerBg: '#fef2f2',     // Light danger background
+          info: '#2563eb',         // Blue
+          infoBg: '#eff6ff',       // Light info background
         },
       },
       fontFamily: {
@@ -56,9 +58,9 @@ const config: Config = {
         },
       },
       boxShadow: {
-        'lab': '0 4px 24px rgba(0, 0, 0, 0.4), 0 0 1px rgba(255, 255, 255, 0.05)',
-        'lab-lg': '0 8px 48px rgba(0, 0, 0, 0.5), 0 0 1px rgba(255, 255, 255, 0.05)',
-        'inner-glow': 'inset 0 0 20px rgba(0, 212, 170, 0.1)',
+        'lab': '0 4px 24px rgba(0, 0, 0, 0.06), 0 0 1px rgba(0, 0, 0, 0.04)',
+        'lab-lg': '0 8px 48px rgba(0, 0, 0, 0.08), 0 0 1px rgba(0, 0, 0, 0.04)',
+        'inner-glow': 'inset 0 0 20px rgba(0, 168, 120, 0.1)',
       },
     },
   },

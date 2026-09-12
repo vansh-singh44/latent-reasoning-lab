@@ -18,7 +18,7 @@ export function Navbar() {
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isDark, setIsDark] = useState(true);
+  const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -31,7 +31,7 @@ export function Navbar() {
     if (stored) {
       setIsDark(stored === 'dark');
     } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      setIsDark(true);
+      setIsDark(false);
     }
   }, []);
 

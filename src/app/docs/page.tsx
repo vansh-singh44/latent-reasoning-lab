@@ -150,6 +150,7 @@ export default function DocsPage() {
           </div>
         </motion.section>
 
+        {/* API Reference */}
         <motion.section
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
